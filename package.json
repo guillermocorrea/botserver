@@ -1,12 +1,13 @@
 {
   "name": "botserver",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A event based server for guebot, based on websockets.",
   "main": "src/server.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,6 +30,13 @@
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-simple-mocha": "^0.4.0",
     "mocha": "^2.0.0",
-    "should": "^4.1.0"
+    "should": "^4.1.0",
+    "socket.io-client": "~1.1.0"
+  },
+  "dependencies": {
+    "express": "~4.9.8",
+    "socket.io": "~1.1.0",
+    "winston": "~0.8.1",
+    "morgan": "~1.4.0"
   }
 }
