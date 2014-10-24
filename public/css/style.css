@@ -1,0 +1,26 @@
+body {
+    padding-top: 70px;
+}
+
+.error {
+	color: red;
+}
+
+.info {
+	color: blue;
+}
+
+.debug {
+	color: green;
+}
+
+#console-log {
+	font-family: 'Courier New', Courier, monospace; 
+	font-size: 12px; 
+	background-color: black; 
+	padding: 10px;
+	margin:20px 0; 
+	color: white;
+	max-height: 300px;
+	overflow: auto;
+}
