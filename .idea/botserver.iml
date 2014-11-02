@@ -7,6 +7,7 @@
     <orderEntry type="library" name="socket.io-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="should-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="socket.io-client-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="botserver node_modules" level="project" />
   </component>
 </module>
 

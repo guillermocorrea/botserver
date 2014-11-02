@@ -24,3 +24,7 @@ body {
 	max-height: 300px;
 	overflow: auto;
 }
+
+#console-log span {
+    font-weight: bold;
+}
