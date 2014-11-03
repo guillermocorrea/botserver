@@ -1,4 +1,4 @@
-var socket = io.connect(Config.baseUrl);
+var socket = io.connect();
     socket.on(Config.movement, function (data) {
         appendMessage(data, 'debug');
         console.log(data);

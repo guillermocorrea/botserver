@@ -1,6 +1,6 @@
 var Config = (function () {
   return {
-  	baseUrl: "http://localhost:8080",
+  	baseUrl: "https://guebot.herokuapp.com/",
   	 /**
          * Publish subscribed channel event, receive/sent the movement
          */
