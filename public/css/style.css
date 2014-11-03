@@ -3,24 +3,24 @@ body {
 }
 
 .error {
-	color: red;
+	color: #FF6C60;
 }
 
 .info {
-	color: blue;
+	color: #96CBFE;
 }
 
 .debug {
-	color: green;
+	color: #0a0;
 }
 
 #console-log {
 	font-family: 'Courier New', Courier, monospace; 
 	font-size: 12px; 
-	background-color: black; 
+	background-color: #222;
 	padding: 10px;
 	margin:20px 0; 
-	color: white;
+	color: #F1F1F1;
 	max-height: 300px;
 	overflow: auto;
 }
