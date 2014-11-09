@@ -1,0 +1,30 @@
+body {
+    padding-top: 70px;
+}
+
+.error {
+	color: #FF6C60;
+}
+
+.info {
+	color: #96CBFE;
+}
+
+.debug {
+	color: #0a0;
+}
+
+#console-log {
+	font-family: 'Courier New', Courier, monospace; 
+	font-size: 12px; 
+	background-color: #222;
+	padding: 10px;
+	margin:20px 0; 
+	color: #F1F1F1;
+	max-height: 300px;
+	overflow: auto;
+}
+
+#console-log span {
+    font-weight: bold;
+}

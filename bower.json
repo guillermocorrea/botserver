@@ -1,0 +1,30 @@
+{
+  "name": "botserver",
+  "version": "0.0.1",
+  "homepage": "https://github.com/guillermocorrea/botserver",
+  "authors": [
+    "Guillermo Correa <luis.guillermo.correa@hotmail.com>"
+  ],
+  "description": "A botserver client app",
+  "main": "public/index.html",
+  "keywords": [
+    "websocket"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendors",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "angular": "~1.3.0",
+    "font-awesome": "~4.2.0",
+    "moment": "~2.8.3",
+    "screenfull": "~1.2.1"
+  }
+}
