@@ -25,14 +25,20 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
     socket.on(config.channels.movement, function (movement) {
         logger.debug('on ' + config.channels.movement + ': ' + movement);
-        if (config.channels.moves[movement] === undefined) {
+        /*if (config.channels.moves[movement] === undefined) {
             logger.debug('emitting ' + config.channels.error + ': ' + movement);
             io.emit(config.channels.error, '\'' + movement + '\' is an invalid move');
             return;
-        }
+        }*/
 
         logger.debug('emitting ' + config.channels.movement + ': ' + movement);
         io.emit(config.channels.movement, movement);
+    });
+
+    socket.on(config.channels.status, function (data) {
+        logger.debug('on ' + config.channels.status+ ': ' + data);
+        logger.debug('emitting ' + config.channels.movement + ': ' + data);
+        io.emit(config.channels.status, data);
     });
 });
 

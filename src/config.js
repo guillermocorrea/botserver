@@ -10,6 +10,10 @@ module.exports = {
          */
         movement: 'movement',
         /**
+         * Listen and broadcast status events
+         */
+        status: 'status',
+        /**
          * Publish channel: sends the error
          */
         error: 'error',
@@ -17,8 +21,19 @@ module.exports = {
          * The moves
          */
         moves: {
-            up: 'up',
-            down: 'down'
+            up: 'UP',
+            down: 'DOWN',
+            open: 'OPEN',
+            close: 'CLOSE'
+        },
+        /**
+         * Robotic arm states
+         */
+        states: {
+            upClosed: 'UP_CLOSED',
+            upOpen: 'UP_OPEN',
+            downClosed: 'DOWN_CLOSED',
+            downOpen: 'DOWN_OPEN'
         }
     },
     server: {
