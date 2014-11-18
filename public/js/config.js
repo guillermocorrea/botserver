@@ -1,10 +1,14 @@
 var Config = (function () {
-  return {
-  	baseUrl: "https://guebot.herokuapp.com/",
-  	 /**
+    return {
+        baseUrl: "http://guebot.herokuapp.com:80",
+        /**
          * Publish subscribed channel event, receive/sent the movement
          */
         movement: 'movement',
+        /**
+         * Status channel
+         */
+        status: 'status',
         /**
          * Publish channel: sends the error
          */
@@ -13,8 +17,10 @@ var Config = (function () {
          * The moves
          */
         moves: {
-            up: 'up',
-            down: 'down'
+            up: 'UP',
+            down: 'DOWN',
+            open: 'OPEN',
+            close: 'CLOSE'
         }
-  };
+    };
 })();
