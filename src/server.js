@@ -10,10 +10,35 @@ var express = require('express');
 var config = require('./config');
 var logger = require('./utils/logger');
 
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash = require('connect-flash');
+
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('express-session');
+
+
 var port = process.env.PORT || config.server.port;
+
+require('./passport')(passport);
+
 server.listen(port);
 
+// express configuration
 app.use(express.static('public'));
+// set up our express application
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// required for passport
+app.use(session({ secret: 'd41d8cd98f00b204e9800998ecf8427e' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
 
 logger.info("Overriding 'Express' logger");
 app.use(require('morgan')("combined", { "stream": logger.stream }));
@@ -21,20 +46,31 @@ app.use(require('morgan')("combined", { "stream": logger.stream }));
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// the callback after google has authenticated the user
+app.get('/oauth2callback',
+    passport.authenticate('google', {
+        successRedirect: '/profile',
+        failureRedirect: '/'
+    }));
+
 
 io.on('connection', function (socket) {
     socket.on(config.channels.movement, function (movement) {
-
-        /*if (movement === undefined ||
+        if (movement === undefined ||
             movement.move === undefined ||
             movement.move.data === undefined ||
             movement.move.data.instruction === undefined ||
             config.channels.moves[movement.move.data.instruction] === undefined) {
-            console.log(movement.move.data.instruction);
-            logger.debug('emitting ' + config.channels.error + ': ' + movement);
-            io.emit(config.channels.error, '\'' + movement + '\' is an invalid move');
+            io.emit(config.channels.error, 'invalid move');
             return;
-        }*/
+        }
 
         io.emit(config.channels.movement, movement);
     });

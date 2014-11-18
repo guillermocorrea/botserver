@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" data-ng-app="restfulApp">
 <head>
@@ -19,6 +18,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 </head>
 <body data-ng-controller="mainController">
 <!-- Fixed navbar -->
@@ -34,31 +34,65 @@
             <a class="navbar-brand" href="#">botserver</a>
         </div>
         <div class="navbar-collapse collapse">
-        </div><!--/.nav-collapse -->
+            <ul class="nav navbar-nav navbar-right">
+                <!-- ngIf: isAuthenticated() -->
+                <li ng-if="!isAuthenticated()" class="ng-scope"><a href="#"><span id="userId"></span></a></li>
+                <!-- end ngIf: isAuthenticated() -->
+                <!-- ngIf: isAuthenticated() -->
+                <!--<li ng-if="isAuthenticated()" class="ng-scope"><a href="/" ng-click="logout()">Log out</a></li>-->
+                <!-- end ngIf: isAuthenticated() -->
+                <!-- ngIf: !isAuthenticated() -->
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
     </div>
 </div>
 <div class="container">
     <!-- MAIN CONTENT AND INJECTED VIEWS -->
     <div id="main">
-    	<h2>Console log</h2>
+        <h2>Console log</h2>
+
+        <div>
+        <span id="signinButton">
+  <span
+          class="g-signin"
+          data-callback="signinCallback"
+          data-clientid="376158680553-n6d97v478eprdugqrpplq9h8qcncp7ol.apps.googleusercontent.com"
+          data-cookiepolicy="single_host_origin"
+          data-requestvisibleactions="http://schema.org/AddAction"
+          data-scope="https://www.googleapis.com/auth/plus.login">
+  </span>
+</span>
+        </div>
         <a href="#" class="btn btn-default" id="button-down" title="Move down"><i class="fa fa-arrow-down"></i></a>
         <a href="#" class="btn btn-default" id="button-up" title="Move up"><i class="fa fa-arrow-up"></i></a>
+
+        <a href="#" class="btn btn-default" id="button-status" title="Status"><i class="fa fa-wifi"></i></a>
+
         <a href="#" class="btn btn-default" id="button-wrong" title="Wrong move"><i class="fa fa-arrows-alt"></i></a>
-    	
+
         <div id="console-log">
             <div><span class="info">info: </span> Botserver console version 0.0.1</div>
         </div>
 
     </div>
-    <hr />
+    <hr/>
     <footer>
-        <a href="https://github.com/guebot/botserver" class="btn btn-default"><i class="fa fa-github"></i> source code</a>
-        <a href='https://travis-ci.org/guillermocorrea/botserver'><img src='https://travis-ci.org/guillermocorrea/botserver.svg?branch=master' alt='Build Status' /></a>
-        <a href='https://coveralls.io/r/guillermocorrea/botserver?branch=master'><img src='https://coveralls.io/repos/guillermocorrea/botserver/badge.png?branch=master' alt='Coverage Status' /></a>
-        <a href="https://codeclimate.com/github/guillermocorrea/botserver"><img src="https://codeclimate.com/github/guillermocorrea/botserver/badges/gpa.svg" alt="Code climate" /></a>
-        <a href='https://www.codeship.io/projects/354c16e0-451f-0132-1d0b-1a768d514c64/status?branch=master'><img src='https://www.codeship.io/projects/354c16e0-451f-0132-1d0b-1a768d514c64/status?branch=master' alt='Deployment status' /></a>
+        <a href="https://github.com/guebot/botserver" class="btn btn-default"><i class="fa fa-github"></i> source
+            code</a>
+        <a href='https://travis-ci.org/guillermocorrea/botserver'><img
+                src='https://travis-ci.org/guillermocorrea/botserver.svg?branch=master' alt='Build Status'/></a>
+        <a href='https://coveralls.io/r/guillermocorrea/botserver?branch=master'><img
+                src='https://coveralls.io/repos/guillermocorrea/botserver/badge.png?branch=master'
+                alt='Coverage Status'/></a>
+        <a href="https://codeclimate.com/github/guillermocorrea/botserver"><img
+                src="https://codeclimate.com/github/guillermocorrea/botserver/badges/gpa.svg" alt="Code climate"/></a>
+        <a href='https://www.codeship.io/projects/354c16e0-451f-0132-1d0b-1a768d514c64/status?branch=master'><img
+                src='https://www.codeship.io/projects/354c16e0-451f-0132-1d0b-1a768d514c64/status?branch=master'
+                alt='Deployment status'/></a>
     </footer>
-</div> <!-- /container -->
+</div>
+<!-- /container -->
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -70,5 +104,53 @@
 <!--<script src="/js/app.js"></script>-->
 <script src="/js/config.js"></script>
 <script src="/js/app.js"></script>
+<script>
+    /**
+     * Callback auth
+     * @param authResult
+     */
+    function signinCallback(authResult) {
+        console.log(authResult);
+        localStorage.setItem('token', authResult.access_token);
+        gapi.client.load('plus', 'v1', apiClientLoaded);
+        if (authResult['status']['signed_in']) {
+            // Update the app to reflect a signed in user
+            // Hide the sign-in button now that the user is authorized, for example:
+            document.getElementById('signinButton').setAttribute('style', 'display: none');
+        } else {
+            // Update the app to reflect a signed out user
+            // Possible error values:
+            //   "user_signed_out" - User is signed-out
+            //   "access_denied" - User denied access to your app
+            //   "immediate_failed" - Could not automatically log in the user
+            console.log('Sign-in state: ' + authResult['error']);
+        }
+    }
+
+    /**
+     * Sets up an API call after the Google API client loads.
+     */
+    function apiClientLoaded() {
+        gapi.client.plus.people.get({userId: 'me'}).execute(handleEmailResponse);
+    }
+
+    /**
+     * Response callback for when the API client receives a response.
+     *
+     * @param resp The API response object with the user email and profile information.
+     */
+    function handleEmailResponse(resp) {
+        console.log('handleEmailResponse');
+        //console.log(resp);
+        /*var primaryEmail;
+        for (var i=0; i < resp.emails.length; i++) {
+            if (resp.emails[i].type === 'account') primaryEmail = resp.emails[i].value;
+        }*/
+
+        $('#userId').text('Hola ' + resp.displayName);
+        localStorage.setItem('user', JSON.stringify(resp));
+    }
+
+</script>
 </body>
 </html>

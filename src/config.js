@@ -21,20 +21,30 @@ module.exports = {
          * The moves
          */
         moves: {
-            up: 'UP',
-            down: 'DOWN',
-            open: 'OPEN',
-            close: 'CLOSE'
+            UP: 'UP',
+            DOWN: 'DOWN',
+            OPEN: 'OPEN',
+            CLOSE: 'CLOSE'
         },
         /**
          * Robotic arm states
          */
         states: {
-            upClosed: 'UP_CLOSED',
-            upOpen: 'UP_OPEN',
-            downClosed: 'DOWN_CLOSED',
-            downOpen: 'DOWN_OPEN'
+            UP_CLOSED: 'UP_CLOSED',
+            UP_OPEN: 'UP_OPEN',
+            DOWN_CLOSED: 'DOWN_CLOSED',
+            DOWN_OPEN: 'DOWN_OPEN'
         }
+    },
+    db: {
+        production: "",
+        development: "mongodb://localhost/botserver-dev",
+        test: "mongodb://localhost/botserver-test"
+    },
+    googleAuth : {
+        'clientID'      : '376158680553-n6d97v478eprdugqrpplq9h8qcncp7ol.apps.googleusercontent.com',
+        'clientSecret'  : 'G5c1Dvo7fzQjvNIBlBMkdPln',
+        'callbackURL'   : 'http://localhost:8080/oauth2callback'
     },
     server: {
         port: 8080,
