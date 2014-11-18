@@ -2,8 +2,9 @@
  * Created by guillermo on 22/10/2014.
  */
 'use strict';
-
 var app = require('express')();
+app.settings.env = 'development';
+
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var express = require('express');
@@ -20,6 +21,10 @@ var session = require('express-session');
 
 
 var port = process.env.PORT || config.server.port;
+
+app.set('dbUrl', process.env.MONGOLAB_URI || config.db[app.settings.env]);
+
+mongoose.connect(app.get('dbUrl'));  // connect to our database
 
 require('./passport')(passport);
 
@@ -39,7 +44,6 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-
 logger.info("Overriding 'Express' logger");
 app.use(require('morgan')("combined", { "stream": logger.stream }));
 
@@ -56,7 +60,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'em
 // the callback after google has authenticated the user
 app.get('/oauth2callback',
     passport.authenticate('google', {
-        successRedirect: '/profile',
+        successRedirect: '/',
         failureRedirect: '/'
     }));
 
