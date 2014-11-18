@@ -7,3 +7,5 @@ botserver
 [ ![Codeship Status for guillermocorrea/botserver](https://www.codeship.io/projects/354c16e0-451f-0132-1d0b-1a768d514c64/status)](https://www.codeship.io/projects/44942)
 
 A websockets server implementation for botserver
+
+https://github.com/guebot/botserver/wiki
