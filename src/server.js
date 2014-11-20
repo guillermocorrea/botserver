@@ -7,6 +7,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var express = require('express');
+var mysql = require('mysql');
 var config = require('./config');
 var logger = require('./utils/logger');
 
@@ -60,6 +61,13 @@ app.get('/oauth2callback',
         failureRedirect: '/'
     }));
 
+var connection = mysql.createConnection({
+    host: config.dbmysql.connection.host,
+    user: config.dbmysql.connection.user,
+    password: config.dbmysql.connection.password,
+    database: config.dbmysql.connection.database,
+    port: config.dbmysql.connection.port
+});
 
 io.on('connection', function (socket) {
     socket.on(config.channels.movement, function (movement) {
