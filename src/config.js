@@ -41,6 +41,15 @@ module.exports = {
         development: "mongodb://localhost/botserver-dev",
         test: "mongodb://localhost/botserver-test"
     },
+    dbmysql: {
+        connection : {
+            host : "sql4.freesqldatabase.com",
+            database : "sql458500",
+            user     : "sql458500",
+            password : "yQ2*iE6!",
+            port : 3306
+        }
+    },
     googleAuth : {
         'clientID'      : '376158680553-n6d97v478eprdugqrpplq9h8qcncp7ol.apps.googleusercontent.com',
         'clientSecret'  : 'G5c1Dvo7fzQjvNIBlBMkdPln',
