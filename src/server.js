@@ -85,7 +85,7 @@ io.on('connection', function (socket) {
         }else{
 
             var values  = [movement.move.userid,movement.move.token,'ee@d.com', config.channels.movement, JSON.stringify(movement),invalidToken];
-            var query = connection.query('INSERT INTO sql458500.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
+            var query = connection.query('INSERT INTO guebot.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
                 logger.info(result);
              });
 
@@ -95,7 +95,7 @@ io.on('connection', function (socket) {
 
     socket.on(config.channels.status, function (data) {
         var values  = [noApply,noApply,noApply, config.channels.status, JSON.stringify(data),invalidToken];
-        var query = connection.query('INSERT INTO sql458500.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
+        var query = connection.query('INSERT INTO guebot.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
             logger.info(result);
         });
         socket.broadcast.emit(config.channels.status, data);

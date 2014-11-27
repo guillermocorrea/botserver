@@ -43,10 +43,10 @@ module.exports = {
     },
     dbmysql: {
         connection : {
-            host : "sql4.freesqldatabase.com",
-            database : "sql458500",
-            user     : "sql458500",
-            password : "yQ2*iE6!",
+            host : "181.49.2.102",
+            database : "guebot",
+            user     : "guebot",
+            password : "guebot",
             port : 3306
         }
     },
