@@ -5,7 +5,7 @@
 
 var app = require('express')();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io');
 var express = require('express');
 var mysql = require('mysql');
 var config = require('./config');
@@ -26,7 +26,9 @@ var port = process.env.PORT || config.server.port;
 
 require('./passport')(passport);
 
+
 server.listen(port);
+var io = io.listen(server);
 
 // express configuration
 app.use(express.static('./public'));
@@ -78,7 +80,7 @@ io.on('connection', function (socket) {
             movement.move.data === undefined ||
             movement.move.data.instruction === undefined ||
             config.channels.moves[movement.move.data.instruction] === undefined) {
-            io.emit(config.channels.error, 'invalid move');
+            socket.broadcast.emit(config.channels.error, 'invalid move');
             return;
         }else{
 
@@ -86,7 +88,8 @@ io.on('connection', function (socket) {
             var query = connection.query('INSERT INTO sql458500.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
                 logger.info(result);
              });
-            io.emit(config.channels.movement, movement);
+
+            socket.broadcast.emit(config.channels.movement, movement);
         }
     });
 
@@ -95,7 +98,7 @@ io.on('connection', function (socket) {
         var query = connection.query('INSERT INTO sql458500.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
             logger.info(result);
         });
-        io.emit(config.channels.status, data);
+        socket.broadcast.emit(config.channels.status, data);
     });
 });
 
