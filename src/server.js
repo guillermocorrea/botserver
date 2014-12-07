@@ -27,7 +27,7 @@ var port = process.env.PORT || config.server.port;
 
 app.set('dbUrl', process.env.MONGOLAB_URI || config.db[app.settings.env]);
 
-mongoose.connect(app.get('dbUrl'));  // connect to our database
+// mongoose.connect(app.get('dbUrl'));  // connect to our database
 
 require('./passport')(passport);
 
