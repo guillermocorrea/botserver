@@ -41,6 +41,15 @@ module.exports = {
         development: "mongodb://localhost/botserver-dev",
         test: "mongodb://localhost/botserver-test"
     },
+    dbmysql: {
+        connection : {
+            host : "181.49.2.102",
+            database : "guebot",
+            user     : "guebot",
+            password : "guebot",
+            port : 3306
+        }
+    },
     googleAuth : {
         'clientID'      : '376158680553-n6d97v478eprdugqrpplq9h8qcncp7ol.apps.googleusercontent.com',
         'clientSecret'  : 'G5c1Dvo7fzQjvNIBlBMkdPln',

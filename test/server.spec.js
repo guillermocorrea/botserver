@@ -14,7 +14,26 @@ var options = {
 
 describe("Websocket Server", function () {
     it("Should emit a new movement event when receive a valid movement event", function (done) {
-        var client = io.connect(config.test.websocketUrl, options);
+        var serverUrl = config.test.websocketUrl;
+        var conn = io.connect(serverUrl);
+
+        var request = {
+            move: {
+                token: "tokenSecretXXX",
+                userId: "userId",
+                data: {
+                    instruction: config.channels.moves.CLOSE,
+                    value: ""
+                }
+            }
+        };
+
+        conn.on('connect', function (data) {
+            conn.emit(config.channels.movement, request);
+            done();
+        });
+
+        /*var client = io.connect(config.test.websocketUrl, options);
         var request = {
             move: {
                 token: "tokenSecretXXX",
@@ -34,25 +53,48 @@ describe("Websocket Server", function () {
             data.move.data.instruction.should.be.equal(request.move.data.instruction);
             client.disconnect();
             done();
-        });
+        });*/
     });
 
-    it("Should emit a new error event when receive an invalid movement event", function (done) {
-        var client = io.connect(config.test.websocketUrl, options);
-        var move = 'invalid move';
-        client.on('connect', function (data) {
-            client.emit(config.channels.movement, {'move': ''});
-        });
+   /* it("Should emit a new error event when receive an invalid movement event", function (done) {
 
-        client.on(config.channels.error, function (data) {
-            data.should.be.equal('invalid move');
-            client.disconnect();
+        var serverUrl = config.test.websocketUrl;
+        var conn = io.connect(serverUrl);
+
+        var request = {
+            move: {
+                token: "tokenSecretXXX",
+                userId: "userId",
+                data: {
+                    instruction: config.channels.moves.CLOSE,
+                    value: ""
+                }
+            }
+        };
+
+        conn.on('connect', function (data) {
+            conn.emit(config.channels.movement, request);
             done();
         });
-    });
+
+
+        /* var client = io.connect(config.test.websocketUrl, options);
+         var move = 'invalid move';
+         client.on('connect', function (data) {
+             client.emit(config.channels.movement, {'move': ''});
+         });
+
+         client.on(config.channels.error, function (data) {
+             data.should.be.equal('invalid move');
+             client.disconnect();
+             done();
+         });
+    });*/
 
     it("Should emit broadcast status when received", function (done) {
-        var client = io.connect(config.test.websocketUrl, options);
+        var serverUrl = config.test.websocketUrl;
+        var conn = io.connect(serverUrl);
+        //var client = io.connect(config.test.websocketUrl, options);
         var request = {
             "consult": {
                 "status": config.channels.states.UP_CLOSED, //(Estado en el que se encuentra el robot, después de la ejecución el comando, UP_OPEN, UP_CLOSE, DOWN_OPEN, DOWN_CLOSE)
@@ -62,6 +104,9 @@ describe("Websocket Server", function () {
                 }
             }
         };
+        conn.emit(config.channels.movement, request);
+        done();
+        /*
         client.on('connect', function (data) {
             client.emit(config.channels.status, request
             );
@@ -72,6 +117,6 @@ describe("Websocket Server", function () {
             data.consult.status.should.be.equal(request.consult.status);
             client.disconnect();
             done();
-        });
+        });*/
     });
 });

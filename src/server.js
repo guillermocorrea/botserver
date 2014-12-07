@@ -6,12 +6,12 @@ var app = require('express')();
 app.settings.env = 'development';
 
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io');
 var express = require('express');
+var mysql = require('mysql');
 var config = require('./config');
 var logger = require('./utils/logger');
 
-var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
 
@@ -19,6 +19,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+var noApply = 'N/A';
+var validToken = 'Y';
+var invalidToken = 'N';
 
 var port = process.env.PORT || config.server.port;
 
@@ -28,10 +31,12 @@ mongoose.connect(app.get('dbUrl'));  // connect to our database
 
 require('./passport')(passport);
 
+
 server.listen(port);
+var io = io.listen(server);
 
 // express configuration
-app.use(express.static('public'));
+app.use(express.static('./public'));
 // set up our express application
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // get information from html forms
@@ -64,6 +69,13 @@ app.get('/oauth2callback',
         failureRedirect: '/'
     }));
 
+var connection = mysql.createConnection({
+    host: config.dbmysql.connection.host,
+    user: config.dbmysql.connection.user,
+    password: config.dbmysql.connection.password,
+    database: config.dbmysql.connection.database,
+    port: config.dbmysql.connection.port
+});
 
 io.on('connection', function (socket) {
     socket.on(config.channels.movement, function (movement) {
@@ -72,15 +84,25 @@ io.on('connection', function (socket) {
             movement.move.data === undefined ||
             movement.move.data.instruction === undefined ||
             config.channels.moves[movement.move.data.instruction] === undefined) {
-            io.emit(config.channels.error, 'invalid move');
+            socket.broadcast.emit(config.channels.error, 'invalid move');
             return;
-        }
+        }else{
 
-        io.emit(config.channels.movement, movement);
+            var values  = [movement.move.userid,movement.move.token,'ee@d.com', config.channels.movement, JSON.stringify(movement),invalidToken];
+            var query = connection.query('INSERT INTO guebot.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
+                logger.info(result);
+             });
+
+            socket.broadcast.emit(config.channels.movement, movement);
+        }
     });
 
     socket.on(config.channels.status, function (data) {
-        io.emit(config.channels.status, data);
+        var values  = [noApply,noApply,noApply, config.channels.status, JSON.stringify(data),invalidToken];
+        var query = connection.query('INSERT INTO guebot.OPERATION_TRACE (USER_ID,TOKEN,EMAIL,CHANNEL_NAME, MESSAGE_CONTENT,AUTHORIZATION_RESULT) VALUES (?,?,?,?,?,?)', values, function(err, result) {
+            logger.info(result);
+        });
+        socket.broadcast.emit(config.channels.status, data);
     });
 });
 
